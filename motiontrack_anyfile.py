@@ -101,8 +101,12 @@ def main():
         print "Using opencv2 untested version "
         fgbg = cv2.createBackgroundSubtractorKNN()
 
-    width = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)   # float
-    height = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) # float
+    if int(major_ver)  < 3 :
+        width = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)   # float
+        height = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) # float
+    else :
+        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)   # float
+        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT) # float
 
     print width, " ", height
 
