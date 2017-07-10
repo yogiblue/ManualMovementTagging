@@ -21,12 +21,18 @@ def mouse_callback(event,x,y,flags,param):
     if event==cv2.EVENT_LBUTTONDOWN:
         print x,y
         fd.write("0000, 0, 0\n")
+        print "Putting zeros into the output file"
         globals.currentx = x
         globals.currenty = y
     elif event==cv2.EVENT_MOUSEMOVE:
         #print x,y
         globals.currentx = x
         globals.currenty = y
+    elif event==cv2.EVENT_RBUTTONDOWN:
+        print "New reference point ", x, ",", y
+        globals.refx = x
+        globals.refy = y
+
 
 def main():
     print "Doing motion tracking on a single video...."
@@ -142,6 +148,9 @@ def main():
     img_write = 0
     frame_count = 0
 
+    print "Current reference point ", globals.refx, ",", globals.refy
+
+
     while(cap.isOpened()):
 
         # read the frame
@@ -189,9 +198,9 @@ def main():
             fd.write(str(float(date_object.second*1000000 + date_object.microsecond)/1000000))
             #fd.write(date_object.strftime("%M:%S.%f").rstrip('0'))
             fd.write(',')
-            fd.write(str(globals.currentx))
+            fd.write(str(globals.currentx-globals.refx))
             fd.write(',')
-            fd.write(str(globals.currenty))
+            fd.write(str(globals.currenty-globals.refy))
             fd.write('\n')
             speed = 0
             frame_count=0
