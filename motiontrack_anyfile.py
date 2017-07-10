@@ -184,7 +184,10 @@ def main():
 
         if frame_count==1:
             #print("here")
-            fd.write(str(date_object))
+            #fd.write(str(date_object))
+            #print(str(float(date_object.second*1000000 + date_object.microsecond)/1000000))
+            fd.write(str(float(date_object.second*1000000 + date_object.microsecond)/1000000))
+            #fd.write(date_object.strftime("%M:%S.%f").rstrip('0'))
             fd.write(',')
             fd.write(str(globals.currentx))
             fd.write(',')
