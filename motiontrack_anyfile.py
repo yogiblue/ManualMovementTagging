@@ -150,6 +150,7 @@ def main():
 
     print "Current reference point ", globals.refx, ",", globals.refy
 
+    recording=False
 
     while(cap.isOpened()):
 
@@ -180,18 +181,37 @@ def main():
         if k & 0xFF == ord('q'):
             break
 
-        if k & 0xFF == ord('x'):
+        if k & 0xFF == ord('n'):
+            speed=0
+            print "Speed is now ", speed
+            recording==False
+
+        if k & 0xFF == ord(' '):
             if speed==0:
-                speed=int(fps)
+                speed= int(fps)
+                print "Speed is now ", speed
             else:
-                speed=0
+                if speed>5:
+                    speed = speed - 5
+                else:
+                    speed = speed - 1
+
+                if speed<0:
+                    speed = 0
+                print "Speed is now ", speed
+
+            recording==False
+
+        if k & 0xFF == ord('x'):
+            recording = True
+            speed=0
         #print globals.currentx,globals.currenty
 
         cv2.imshow('video',frame1)
         if count==0:
             cv2.setMouseCallback("video", mouse_callback)
 
-        if frame_count==1:
+        if recording==True:
             #print("here")
             #fd.write(str(date_object))
             #print(str(float(date_object.second*1000000 + date_object.microsecond)/1000000))
