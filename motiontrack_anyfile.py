@@ -149,7 +149,7 @@ def main():
     frame_count = 0
 
     print "Current reference point ", globals.refx, ",", globals.refy
-
+    minute_count=0
     recording=False
 
     while(cap.isOpened()):
@@ -173,6 +173,8 @@ def main():
         #of the recording of those frames - so it's not so straightforward
         #date_object = date_object + datetime.timedelta(0,0,333333)
         date_object = date_object + datetime.timedelta(0,0,1000000/fps)
+        if date_object.second==0 and date_object.microsecond==0:
+            minute_count = minute_count+1
 
         # move on
         k = cv2.waitKey(speed)
@@ -184,6 +186,7 @@ def main():
         if k & 0xFF == ord('n'):
             speed=0
             print "Speed is now ", speed
+            print "Cursor is at ", globals.currentx, globals.currenty
             recording==False
 
         if k & 0xFF == ord(' '):
@@ -207,6 +210,10 @@ def main():
             speed=0
         #print globals.currentx,globals.currenty
 
+        if k & 0xFF == ord('s'):
+            recording = True
+            speed=speed + int(fps) + int(fps)
+
         cv2.imshow('video',frame1)
         if count==0:
             cv2.setMouseCallback("video", mouse_callback)
@@ -215,14 +222,15 @@ def main():
             #print("here")
             #fd.write(str(date_object))
             #print(str(float(date_object.second*1000000 + date_object.microsecond)/1000000))
-            fd.write(str(float(date_object.second*1000000 + date_object.microsecond)/1000000))
+
+            fd.write(str(float(60*minute_count*1000000 + date_object.second*1000000 + date_object.microsecond)/1000000))
             #fd.write(date_object.strftime("%M:%S.%f").rstrip('0'))
             fd.write(',')
             fd.write(str(globals.currentx-globals.refx))
             fd.write(',')
             fd.write(str(globals.currenty-globals.refy))
             fd.write('\n')
-            speed = 0
+            #speed = 0
             frame_count=0
 
         frame_count=frame_count + 1
